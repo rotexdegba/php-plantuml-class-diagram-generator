@@ -1,0 +1,57 @@
+@startuml
+class VersatileCollections.ScalarCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.ScalarCollection extends VersatileCollections.StrictlyTypedCollection
+class VersatileCollections.CallablesCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.CallablesCollection extends VersatileCollections.StrictlyTypedCollection
+abstract class VersatileCollections.BaseCollection {
+    #collection_items = []
+    +count()
+    +firstItem() : mixed
+    +getIterator()
+    +getKeys()
+    +lastItem() : mixed
+    +offsetExists(key : string) : bool
+    +offsetGet(key : string) : mixed
+    +offsetSet(key : string, val : string) : void
+    +offsetUnset(key : string) : void
+    +toArray()
+    +__construct(arr_objs)
+    +__get(key)
+    +__isset(key)
+    +__set(key, val)
+    +__unset(key)
+}
+class VersatileCollections.BaseCollection implements ArrayAccess
+class VersatileCollections.BaseCollection implements Countable
+class VersatileCollections.BaseCollection implements IteratorAggregate
+abstract class VersatileCollections.StrictlyTypedCollection {
+    #checkType(item)
+    #getType()
+    #isRightTypeOrThrowInvalidTypeException(item, calling_functions_name)
+    +offsetSet(key, val)
+    +__construct(arr_objs)
+}
+class VersatileCollections.StrictlyTypedCollection extends VersatileCollections.BaseCollection
+class VersatileCollections.ObjectCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.ObjectCollection extends VersatileCollections.StrictlyTypedCollection
+class VersatileCollections.GenericCollection {
+}
+class VersatileCollections.GenericCollection extends VersatileCollections.BaseCollection
+class VersatileCollections.ResourceCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.ResourceCollection extends VersatileCollections.StrictlyTypedCollection
+class VersatileCollections.Exceptions.InvalidItemException {
+}
+class VersatileCollections.Exceptions.InvalidItemException extends Exception
+@enduml

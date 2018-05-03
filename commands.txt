@@ -1,0 +1,5 @@
+graphviz must be installed
+
+php bin/php-plantumlwriter write /path/to/folder/containing/classes/ > name-of-output-file.puml
+
+java -jar plantuml.1.2018.4.jar ./name-of-output-file.puml
