@@ -1,57 +1,131 @@
 @startuml
-class VersatileCollections.ScalarCollection {
-    #checkType(item)
-    #getType()
-}
-class VersatileCollections.ScalarCollection extends VersatileCollections.StrictlyTypedCollection
-class VersatileCollections.CallablesCollection {
-    #checkType(item)
-    #getType()
-}
-class VersatileCollections.CallablesCollection extends VersatileCollections.StrictlyTypedCollection
 abstract class VersatileCollections.BaseCollection {
     #collection_items = []
+    +appendCollection(other : VersatileCollections.CollectionInterface)
+    +appendItem(item)
+    +containsItem(item)
+    +containsKey(key)
     +count()
-    +firstItem() : mixed
+    +filterAll(filterer, copy_keys = false)
+    +filterFirstN(filterer, max_number_of_filtered_items_to_return = null, copy_keys = false)
+    +firstItem()
+    +getCollectionsOfSizeN(max_size_of_each_collection = 1)
+    +getIfExists(key, default_value = null)
     +getIterator()
     +getKeys()
-    +lastItem() : mixed
-    +offsetExists(key : string) : bool
-    +offsetGet(key : string) : mixed
-    +offsetSet(key : string, val : string) : void
-    +offsetUnset(key : string) : void
+    +isEmpty()
+    +lastItem()
+    +makeAllKeysNumeric()
+    +{static}makeNewCollection(items)
+    +merge(other : VersatileCollections.CollectionInterface)
+    +offsetExists(key)
+    +offsetGet(key)
+    +offsetSet(key, val)
+    +offsetUnset(key)
+    +prependCollection(other : VersatileCollections.CollectionInterface)
+    +prependItem(item)
+    +reduce(reducer, initial_value = null)
+    +setValForEachItem(field_name, field_val, add_field_if_not_present = false)
     +toArray()
-    +__construct(arr_objs)
+    +transform(transformer)
+    +__construct(items)
     +__get(key)
     +__isset(key)
     +__set(key, val)
     +__unset(key)
 }
-class VersatileCollections.BaseCollection implements ArrayAccess
-class VersatileCollections.BaseCollection implements Countable
-class VersatileCollections.BaseCollection implements IteratorAggregate
-abstract class VersatileCollections.StrictlyTypedCollection {
-    #checkType(item)
-    #getType()
-    #isRightTypeOrThrowInvalidTypeException(item, calling_functions_name)
-    +offsetSet(key, val)
-    +__construct(arr_objs)
-}
-class VersatileCollections.StrictlyTypedCollection extends VersatileCollections.BaseCollection
-class VersatileCollections.ObjectCollection {
+class VersatileCollections.BaseCollection implements VersatileCollections.CollectionInterface
+class VersatileCollections.CallablesCollection {
     #checkType(item)
     #getType()
 }
-class VersatileCollections.ObjectCollection extends VersatileCollections.StrictlyTypedCollection
+class VersatileCollections.CallablesCollection extends VersatileCollections.StrictlyTypedCollection
+interface VersatileCollections.CollectionInterface {
+    +appendCollection(other : VersatileCollections.CollectionInterface) : $this
+    +appendItem(item : mixed) : $this
+    +containsItem(item : mixed) : bool
+    +containsKey(key : mixed) : bool
+    +count() : int
+    +filterAll(filterer : callable, copy_keys : bool = false) : VersatileCollections.CollectionInterface
+    +filterFirstN(filterer : callable, max_number_of_filtered_items_to_return : int = null, copy_keys : bool = false) : VersatileCollections.CollectionInterface
+    +firstItem() : mixed
+    +getCollectionsOfSizeN(max_size_of_each_collection : int = 1) : generator
+    +getIfExists(key : string|int, default_value : mixed = null) : mixed
+    +getIterator() : Iterator
+    +getKeys() : array
+    +isEmpty() : bool
+    +lastItem() : mixed
+    +makeAllKeysNumeric() : $this
+    +{static}makeNewCollection(items : array) : VersatileCollections.CollectionInterface
+    +merge(other : VersatileCollections.CollectionInterface) : $this
+    +offsetExists(key : string) : bool
+    +offsetGet(key : string) : mixed
+    +offsetSet(key : string, val : string) : void
+    +offsetUnset(key : string) : void
+    +prependCollection(other : VersatileCollections.CollectionInterface) : $this
+    +prependItem(item : mixed) : $this
+    +reduce(reducer : callable, initial_value : mixed = null) : mixed
+    +setValForEachItem(field_name : string, field_val : mixed, add_field_if_not_present : bool = false) : $this
+    +toArray() : array
+    +transform(transformer : callable) : $this
+}
+interface VersatileCollections.CollectionInterface implements ArrayAccess
+interface VersatileCollections.CollectionInterface implements Countable
+interface VersatileCollections.CollectionInterface implements IteratorAggregate
+class VersatileCollections.FloatCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.FloatCollection extends VersatileCollections.NumericsCollection
 class VersatileCollections.GenericCollection {
 }
 class VersatileCollections.GenericCollection extends VersatileCollections.BaseCollection
+class VersatileCollections.IntCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.IntCollection extends VersatileCollections.NumericsCollection
+class VersatileCollections.NumericsCollection {
+    +average()
+    #checkType(item)
+    #getType()
+    +max()
+    +min()
+    +sum() : float|int
+}
+class VersatileCollections.NumericsCollection extends VersatileCollections.ScalarCollection
+class VersatileCollections.ObjectCollection {
+    #checkType(item)
+    #getType()
+    +__call(method_name : string, arguments : array)
+}
+class VersatileCollections.ObjectCollection extends VersatileCollections.StrictlyTypedCollection
 class VersatileCollections.ResourceCollection {
     #checkType(item)
     #getType()
 }
 class VersatileCollections.ResourceCollection extends VersatileCollections.StrictlyTypedCollection
-class VersatileCollections.Exceptions.InvalidItemException {
+class VersatileCollections.ScalarCollection {
+    #checkType(item)
+    #getType()
+    +unique(strict_comparison = false)
 }
-class VersatileCollections.Exceptions.InvalidItemException extends Exception
+class VersatileCollections.ScalarCollection extends VersatileCollections.StrictlyTypedCollection
+abstract class VersatileCollections.StrictlyTypedCollection {
+    +appendCollection(other : VersatileCollections.CollectionInterface) : $this
+    #checkType(item)
+    #getType()
+    #isRightTypeOrThrowInvalidTypeException(item, calling_functions_name)
+    +merge(other : VersatileCollections.CollectionInterface) : $this
+    +offsetSet(key, val)
+    +prependCollection(other : VersatileCollections.CollectionInterface) : $this
+    +prependItem(item : mixed) : $this
+    +__construct(arr_objs)
+}
+class VersatileCollections.StrictlyTypedCollection extends VersatileCollections.BaseCollection
+class VersatileCollections.StringCollection {
+    #checkType(item)
+    #getType()
+}
+class VersatileCollections.StringCollection extends VersatileCollections.ScalarCollection
 @enduml
